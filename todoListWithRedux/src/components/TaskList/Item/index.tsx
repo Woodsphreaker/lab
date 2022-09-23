@@ -4,22 +4,43 @@ import { FaTrash, FaPen } from 'react-icons/fa'
 
 import { TaskAction, TaskInput, TaskActionsContainer } from './styles'
 
-function Item() {
+interface ItemProps {
+  taskId: number
+  taskName: string
+  done: boolean
+  handleStatusChange: (id: number) => void
+  handleRemoveTodo: (id: number) => void
+}
+
+function Item({
+  taskId,
+  taskName = 'taskName',
+  done,
+  handleStatusChange,
+  handleRemoveTodo,
+}: ItemProps) {
   return (
     <>
       <TaskAction>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={done}
+          onChange={() => handleStatusChange(taskId)}
+        />
       </TaskAction>
-      <TaskInput done={!!Math.floor(Math.random() * 10)}>
-        <span>Lorem Ipsum Dolor</span>
+      <TaskInput done={done}>
+        <span>{taskName}</span>
       </TaskInput>
       <TaskActionsContainer className="actionsContainer">
         <TaskAction>
-          <ButtonWithIcon>
-            <FaTrash size={15} color="var(--white)" />
-          </ButtonWithIcon>
-          <ButtonWithIcon>
+          <ButtonWithIcon title="Edit Task">
             <FaPen size={15} color="var(--white)" />
+          </ButtonWithIcon>
+          <ButtonWithIcon
+            title="Delete Task"
+            onClick={() => handleRemoveTodo(taskId)}
+          >
+            <FaTrash size={15} color="var(--white)" />
           </ButtonWithIcon>
         </TaskAction>
       </TaskActionsContainer>

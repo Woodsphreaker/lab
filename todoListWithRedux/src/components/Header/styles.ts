@@ -12,13 +12,15 @@ export const Container = styled.div`
   align-items: center;
 
   width: 100%;
-  min-height: 250px;
+  min-height: 270px;
   background-color: var(--primary);
   background-image: url(${headerBG});
   background-position: bottom;
   background-size: cover;
   border-radius: 10px 10px 0 0;
   overflow: hidden;
+
+  position: relative;
 `
 
 export const AppDescription = styled.div`

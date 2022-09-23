@@ -15,6 +15,14 @@ export const Container = styled.div`
     border-top: 1px solid var(--text);
   }
 
+  :first-child {
+    border-radius: 5px 5px 0 0;
+  }
+
+  :last-child {
+    border-radius: 0 0 5px 5px;
+  }
+
   cursor: pointer;
 
   :hover {
