@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ButtonWithIcon } from '../../Form/Button/WithIcon'
 import { FaTrash, FaPen } from 'react-icons/fa'
 
 import { TaskAction, TaskInput, TaskActionsContainer } from './styles'
+import { ItemEdit } from '../ItemEdit'
 
 interface ItemProps {
   taskId: number
@@ -19,6 +20,24 @@ function Item({
   handleStatusChange,
   handleRemoveTodo,
 }: ItemProps) {
+  const [editMode, setEditMode] = useState(false)
+
+  const handleEditMode = () => {
+    setEditMode((currentState) => !currentState)
+  }
+
+  if (editMode) {
+    return (
+      <>
+        <ItemEdit
+          taskId={taskId}
+          taskName={taskName}
+          onEndEditing={handleEditMode}
+        />
+      </>
+    )
+  }
+
   return (
     <>
       <TaskAction>
@@ -33,9 +52,10 @@ function Item({
       </TaskInput>
       <TaskActionsContainer className="actionsContainer">
         <TaskAction>
-          <ButtonWithIcon title="Edit Task">
+          <ButtonWithIcon title="Edit Task" onClick={handleEditMode}>
             <FaPen size={15} color="var(--white)" />
           </ButtonWithIcon>
+
           <ButtonWithIcon
             title="Delete Task"
             onClick={() => handleRemoveTodo(taskId)}

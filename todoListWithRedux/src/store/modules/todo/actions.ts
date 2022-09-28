@@ -1,3 +1,8 @@
+interface EditTodo {
+  id: number
+  taskName: string
+}
+
 const addTodo = (todo: string) => {
   return {
     type: '@todo/Add',
@@ -25,4 +30,14 @@ const removeTodo = (id: number) => {
   }
 }
 
-export { addTodo, doneTodo, removeTodo }
+const editTodo = ({ id, taskName }: EditTodo) => {
+  return {
+    type: '@todo/editTodo',
+    payload: {
+      id,
+      taskName,
+    },
+  }
+}
+
+export { addTodo, doneTodo, removeTodo, editTodo }

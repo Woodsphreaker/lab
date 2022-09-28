@@ -88,6 +88,19 @@ function todoReducer(
       const todos = state.todos.filter((todo) => todo.id !== id)
       return getTodosState(todos)
     },
+
+    '@todo/editTodo': (): ReducerState => {
+      const {
+        payload: { id, taskName },
+      } = action
+
+      const todos = state.todos.map((todo) => ({
+        ...todo,
+        taskName: todo.id === id ? taskName : todo.taskName,
+      }))
+
+      return getTodosState(todos)
+    },
     default: (): ReducerState => state,
   }
 
