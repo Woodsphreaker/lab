@@ -20,6 +20,7 @@ function Header() {
   }
 
   const { todosState } = useTodo()
+  console.log('reder Header')
 
   return (
     <Container>
