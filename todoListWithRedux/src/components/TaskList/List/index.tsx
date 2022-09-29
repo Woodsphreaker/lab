@@ -23,7 +23,7 @@ function List() {
   return (
     <Container>
       {todos.map(({ id, taskName, done = false }) => (
-        <ItemContainer>
+        <ItemContainer key={id}>
           <Item
             taskId={id}
             taskName={taskName}
