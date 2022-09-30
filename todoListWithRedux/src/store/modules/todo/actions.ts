@@ -1,43 +1,55 @@
-interface EditTodo {
-  id: number
-  taskName: string
-}
+import { Todos, ActionsTypes, TodoStateTypes } from './types'
 
-const addTodo = (todo: string) => {
+const addTodo = (taskName: string) => {
   return {
-    type: '@todo/Add',
+    type: ActionsTypes.ADD,
     payload: {
-      taskName: todo,
+      todo: { taskName },
     },
   }
 }
 
 const doneTodo = (id: number) => {
   return {
-    type: '@todo/doneTodo',
+    type: ActionsTypes.DONE,
     payload: {
-      id,
+      todo: { id },
     },
+  }
+}
+
+const editTodo = ({ id, taskName }: Todos) => {
+  return {
+    type: ActionsTypes.EDIT,
+    payload: {
+      todo: { id, taskName },
+    },
+  }
+}
+
+const filterTodo = (todosState: TodoStateTypes) => {
+  return {
+    type: ActionsTypes.FILTER,
+    payload: {
+      todosState,
+    },
+  }
+}
+
+const clearAllTodos = () => {
+  return {
+    type: ActionsTypes.CLEAR,
+    payload: {},
   }
 }
 
 const removeTodo = (id: number) => {
   return {
-    type: '@todo/removeTodo',
+    type: ActionsTypes.REMOVE,
     payload: {
-      id,
+      todo: { id },
     },
   }
 }
 
-const editTodo = ({ id, taskName }: EditTodo) => {
-  return {
-    type: '@todo/editTodo',
-    payload: {
-      id,
-      taskName,
-    },
-  }
-}
-
-export { addTodo, doneTodo, removeTodo, editTodo }
+export { addTodo, doneTodo, editTodo, removeTodo, filterTodo, clearAllTodos }

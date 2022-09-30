@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { FaTasks } from 'react-icons/fa'
 import { TaskInput } from '../TaskInput'
+
+import { useDispatch } from 'react-redux'
+import { filterTodo } from '../../store/modules/todo/actions'
 import {
   Container,
   AppDescription,
@@ -9,19 +12,21 @@ import {
   Task,
 } from './styles'
 
-type ActiveFilterProps = 'all' | 'pending' | 'completed'
-
 import { useSelector } from 'react-redux'
-import { ReducerState } from '../../store/modules/todo/reducer'
+import { TodosStore, TodoStateTypes } from '../../store/modules/todo/types'
 
 function Header() {
-  const [activeFilter, setActiveFilter] = useState<ActiveFilterProps>('all')
+  const [activeFilter, setActiveFilter] = useState<TodoStateTypes>('all')
+  const dispatch = useDispatch()
 
-  const handleFilter = (filter: ActiveFilterProps) => () => {
+  const handleFilter = (filter: TodoStateTypes) => () => {
     setActiveFilter(filter)
+    dispatch({ type: '@todo/async' })
   }
 
-  const todos = useSelector(({ todosState }: ReducerState) => todosState)
+  const { todosState } = useSelector(
+    ({ todoReducer }: TodosStore) => todoReducer
+  )
 
   return (
     <Container>
@@ -34,21 +39,18 @@ function Header() {
         <span>My Tasks</span>
         <TasksContainer>
           <Task active={activeFilter === 'all'} onClick={handleFilter('all')}>
-            <p>{todos?.all.toString().padStart(2, '0')}</p>
+            <p>{todosState?.all.toString().padStart(2, '0')}</p>
             <span>tasks</span>
           </Task>
           <Task
             active={activeFilter === 'pending'}
             onClick={handleFilter('pending')}
           >
-            <p>{todos?.pending.toString().padStart(2, '0')}</p>
+            <p>{todosState?.pending.toString().padStart(2, '0')}</p>
             <span>pending</span>
           </Task>
-          <Task
-            active={activeFilter === 'completed'}
-            onClick={handleFilter('completed')}
-          >
-            <p>{todos?.done.toString().padStart(2, '0')}</p>
+          <Task active={activeFilter === 'done'} onClick={handleFilter('done')}>
+            <p>{todosState?.done.toString().padStart(2, '0')}</p>
             <span>completed</span>
           </Task>
         </TasksContainer>

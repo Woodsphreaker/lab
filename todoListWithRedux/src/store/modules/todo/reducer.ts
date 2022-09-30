@@ -1,65 +1,28 @@
 import { generateRandomNumbers } from '../../../utils/generateRandomNumbers'
+import { getTodosState } from './helpers'
 
-interface Todos {
-  id: number
-  taskName: string
-  done?: boolean
-}
+import {
+  ActionsTypes,
+  ReducerProps,
+  ReducerState,
+  Todos,
+  TodosState,
+} from './types'
 
-interface TodosState {
-  all: number
-  pending: number
-  done: number
-}
-
-type ReducerProps = {
-  type: '@todo/Add' | '@todo/doneTodo' | '@todo/removeTodo'
-  payload: Todos
-}
-
-export type ReducerState = {
-  todos: Todos[]
-  todosState?: TodosState
-}
-
-const INITIAL_STATE = {
+const INITIAL_STATE: ReducerState = {
   todos: [],
   todosState: { all: 0, done: 0, pending: 0 },
 }
 
-const getTodosState = (todos: Todos[]): ReducerState => {
-  const todosState = todos.reduce(
-    (acc: TodosState, todo) => {
-      if (todo.done) {
-        acc.done += 1
-      }
-
-      if (!todo.done) {
-        acc.pending += 1
-      }
-
-      acc.all += 1
-      return acc
-    },
-    { all: 0, done: 0, pending: 0 }
-  )
-
-  return {
-    todos,
-    todosState,
-  }
-}
-
-function todoReducer(
-  state = INITIAL_STATE as ReducerState,
-  action: ReducerProps
-) {
+function todoReducer(state = INITIAL_STATE, action: ReducerProps) {
   const { type } = action
 
   const actions = {
-    '@todo/Add': (): ReducerState => {
+    [ActionsTypes.ADD]: () => {
       const {
-        payload: { taskName },
+        payload: {
+          todo: { taskName },
+        },
       } = action
       const todos = [
         ...state.todos,
@@ -67,9 +30,11 @@ function todoReducer(
       ]
       return getTodosState(todos)
     },
-    '@todo/doneTodo': (): ReducerState => {
+    [ActionsTypes.DONE]: () => {
       const {
-        payload: { id },
+        payload: {
+          todo: { id },
+        },
       } = action
 
       const todos = state.todos.map((todo) => {
@@ -80,18 +45,22 @@ function todoReducer(
       })
       return getTodosState(todos)
     },
-    '@todo/removeTodo': (): ReducerState => {
+    [ActionsTypes.REMOVE]: () => {
       const {
-        payload: { id },
+        payload: {
+          todo: { id },
+        },
       } = action
 
       const todos = state.todos.filter((todo) => todo.id !== id)
       return getTodosState(todos)
     },
 
-    '@todo/editTodo': (): ReducerState => {
+    [ActionsTypes.EDIT]: () => {
       const {
-        payload: { id, taskName },
+        payload: {
+          todo: { id, taskName },
+        },
       } = action
 
       const todos = state.todos.map((todo) => ({
@@ -101,7 +70,19 @@ function todoReducer(
 
       return getTodosState(todos)
     },
-    default: (): ReducerState => state,
+
+    [ActionsTypes.FILTER]: () => {
+      const {
+        payload: { todosState },
+      } = action
+
+      return INITIAL_STATE
+    },
+
+    [ActionsTypes.CLEAR]: () => {
+      return INITIAL_STATE
+    },
+    default: () => state,
   }
 
   return (actions[type] || actions.default)()

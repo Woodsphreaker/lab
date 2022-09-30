@@ -19,6 +19,7 @@ function TaskInput() {
     if (!taskDescription) {
       return inputRef.current?.focus()
     }
+
     dispatch(addTodo(taskDescription))
     setTaskDescription('')
   }

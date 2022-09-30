@@ -1,12 +1,10 @@
-import React from 'react'
 import { ItemContainer } from '../ItemContainer'
 import { Item } from '../Item'
-
 import { Container } from './styles'
-
 import { useSelector, useDispatch } from 'react-redux'
-import { ReducerState } from '../../../store/modules/todo/reducer'
+import { TodosStore } from '../../../store/modules/todo/types'
 import { doneTodo, removeTodo } from '../../../store/modules/todo/actions'
+import { Component, useState } from 'react'
 
 function List() {
   const dispatch = useDispatch()
@@ -19,7 +17,8 @@ function List() {
     dispatch(removeTodo(todoID))
   }
 
-  const todos = useSelector(({ todos }: ReducerState) => todos)
+  const { todos } = useSelector(({ todoReducer }: TodosStore) => todoReducer)
+
   return (
     <Container>
       {todos.map(({ id, taskName, done = false }) => (
